@@ -64,7 +64,7 @@ def tourne2():
   mot_dro.run(200)
 
 #Le code
-While True:
+while True:
   avancer()
   wait(500)
   cercle()
