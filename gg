@@ -1,0 +1,79 @@
+#!/usr/bin/env pybricks-micropython
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
+from pybricks.parameters import Port, Stop, Direction, Button, Color
+from pybricks.tools import wait, StopWatch, DataLog
+from pybricks.robotics import DriveBase
+from pybricks.media.ev3dev import SoundFile, ImageFile
+import math
+
+# La ligne qui suit associe la brique au nom ev3
+ev3 = EV3Brick()
+
+diam=54.9
+largeur=105
+mot_gau = Motor(Port.B)
+mot_dro = Motor(Port.C)#ils sont peut-être inversé regarde si robot tourne sens anti-horaire (il doit faire ça)
+touch_sensor = TouchSensor(Port.S1)
+robot = DriveBase(mot_gau, mot_dro, diam, largeur)
+gyro = GyroSensor(Port.S3) #JSP SI BESOIN
+
+#Faire avancer le robot 
+def avancer():
+  mot_gau.run(500)
+  mot_dro.run(500)
+
+#Marche arriere
+def reculer():
+  mot_gau.run(-500)
+  mot_dro.run(-500)
+
+#Tourner sur lui même
+def tourne():
+  mot_gau.run(500)
+  mot_dro.run(-500)
+
+#Arrêter
+def arret():
+  mot_gau.stop()
+  mot_dro.stop()
+
+#Faire le cercle
+def cercle():
+  while gyro.angle() >-360:
+    mot_gau.run(500)
+    mot_dro.run(275)
+
+#colision
+
+def colision():
+  while True:
+    avancer()
+    if touch_sensor.pressed():
+      arret()
+      break
+#Tourner plus lentement
+
+def tourne1():
+  mot_gau.run(200)
+  mot_dro.run(-200)
+
+#Tourner plus lentement sens inverse
+def tourne2():
+  mot_gau.run(-200)
+  mot_dro.run(200)
+
+#Le code
+While True:
+  avancer()
+  wait(500)
+  cercle()
+  colision()
+  arret()
+  wait(5000)
+  reculer()
+  wait(500)
+  tourne()
+  wait(800)
+  arret()
+  break
